@@ -4,7 +4,7 @@ import { useCallback, useEffect, useReducer } from 'react';
 import { authReducer, initialAuthState } from './reducers';
 import type { LoginPayload, AuthUser } from './types';
 import { getAccessToken, getUserInfo, setAccessToken, setUserInfo } from '../../apiClient';
-import { fetchCurrentUser, loginRequest } from './api';
+import { fetchCurrentUser, loginRequest, signupRequest } from './api';
 
 export function useAuth() {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
@@ -37,6 +37,23 @@ export function useAuth() {
     }
   }, []);
 
+  const signup = useCallback(async (payload: {
+    email: string;
+    username: string;
+    full_name?: string;
+    password: string;
+  }) => {
+    dispatch({ type: 'AUTH_START' });
+    try {
+      const user = await signupRequest(payload);
+      // Signup doesn't return a token - user needs to login after signup
+      return user;
+    } catch (err: any) {
+      dispatch({ type: 'AUTH_ERROR', payload: err.message ?? 'Signup failed' });
+      throw err;
+    }
+  }, []);
+
   const refreshUser = useCallback(async () => {
     dispatch({ type: 'AUTH_START' });
     try {
@@ -63,6 +80,7 @@ export function useAuth() {
     ...state,
     isAuthenticated: Boolean(state.accessToken && state.user),
     login,
+    signup,
     refreshUser,
     logout,
   };

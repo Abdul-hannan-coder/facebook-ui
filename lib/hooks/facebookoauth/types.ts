@@ -16,5 +16,15 @@ export interface FacebookOAuthState {
   loading: boolean;
   error: string | null;
   connected: boolean;
+  isPopupOpen: boolean;
+}
+
+export interface FacebookTokenResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    token: string;
+    expires_at?: string;
+  };
 }
 

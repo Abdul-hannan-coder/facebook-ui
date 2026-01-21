@@ -4,13 +4,16 @@ export const initialFacebookOAuthState: FacebookOAuthState = {
   loading: false,
   error: null,
   connected: false,
+  isPopupOpen: false,
 };
 
 type FacebookOAuthAction =
   | { type: 'FACEBOOK_OAUTH_START' }
   | { type: 'FACEBOOK_OAUTH_SUCCESS' }
   | { type: 'FACEBOOK_OAUTH_ERROR'; payload: string }
-  | { type: 'FACEBOOK_OAUTH_DISCONNECT' };
+  | { type: 'FACEBOOK_OAUTH_DISCONNECT' }
+  | { type: 'FACEBOOK_OAUTH_POPUP_OPEN' }
+  | { type: 'FACEBOOK_OAUTH_POPUP_CLOSE' };
 
 export function facebookOAuthReducer(
   state: FacebookOAuthState,
